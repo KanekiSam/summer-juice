@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="./font_r6oq39dz9up/iconfont.css" />
+    <script src="./font_r6oq39dz9up/iconfont.js"></script>
+  </head>
+  <style>
+    #main {
+      max-width: 800px;
+      height: 800px;
+      background-color: #fffbf0;
+      margin: 0 auto;
+      padding: 15px;
+      --juice: blueviolet;
+      --cup-w: 80px;
+      --cup-h: 120px;
+      --cup-bg: #d9d9d9;
+      position: relative;
+    }
+    .cups {
+      margin-bottom: 60px;
+    }
+    .empty-cup {
+      width: var(--cup-w);
+      height: var(--cup-h);
+      border-radius: 0 0 20px 20px;
+      background-color: var(--cup-bg);
+      position: relative;
+      margin-bottom: 15px;
+      display: inline-block;
+      margin-left: calc((100% - 30px - 5 * var(--cup-w)) / 6);
+      text-align: center;
+    }
+    .empty-cup .juice {
+      --border: 5px;
+      width: calc(var(--cup-w) - var(--border) * 2);
+      height: 60px;
+      position: absolute;
+      background-color: var(--juice);
+      bottom: var(--border);
+      left: var(--border);
+      border-radius: 0 0 20px 20px;
+    }
+    .empty-cup .svg-icon {
+      width: 2.5em;
+      height: 2.5em;
+      overflow: hidden;
+      margin-top: 0.5em;
+      /* font-size: 32px; */
+      /* line-height: 60px; */
+      /* color: #fff; */
+    }
+    .dumping {
+      transform: rotate(-95deg);
+      margin-left: 30px;
+      animation: dumping 2s linear forwards;
+    }
+    .dumping .juice {
+      /* height: calc(var(--cup-h) - var(--border)); */
+      animation: fall2 1s linear forwards;
+      animation-delay: 1s;
+    }
+    .dumping .juice::before {
+      content: "";
+      display: block;
+      width: 0;
+      height: 0;
+      border: 60px solid transparent;
+      border-width: 105px 0px 45px 65px;
+      border-top-color: var(--cup-bg);
+      position: absolute;
+      top: -1px;
+      right: -1px;
+      animation: fall 1s linear forwards;
+      animation-delay: 1s;
+      opacity: 0;
+    }
+    .dumping .juice::after {
+      content: "";
+      display: block;
+      width: 5px;
+      height: 0;
+      background-color: var(--juice);
+      position: absolute;
+      top: 0px;
+      left: 5px;
+      transform: rotate(95deg);
+      transform-origin: top;
+      border-top-left-radius: 5px;
+      animation: fall3 1s linear forwards;
+      animation-delay: 2s;
+    }
+    .fruit-cup {
+      width: 120px;
+      height: 180px;
+      background-color: var(--cup-bg);
+      border-bottom-left-radius: 100%;
+      border-bottom-right-radius: 100%;
+      position: absolute;
+      margin: 0 auto;
+      border-top: 1px solid transparent;
+      bottom: 120px;
+      left: calc(50% - 60px);
+    }
+    .cup-inner {
+      /* width: calc(100% - 10px); */
+      height: calc(100% - 20px);
+      border-bottom-left-radius: 100%;
+      border-bottom-right-radius: 100%;
+      margin: 5px 8px 15px 8px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+    .fruit-cup::before {
+      content: "";
+      display: block;
+      width: 8px;
+      height: 60px;
+      position: absolute;
+      bottom: -60px;
+      left: calc(50% - 4px);
+      background-color: var(--cup-bg);
+    }
+    .fruit-cup::after {
+      content: "";
+      display: block;
+      width: 75px;
+      height: 12px;
+      border-radius: 100%;
+      position: absolute;
+      bottom: -65px;
+      background-color: var(--cup-bg);
+      left: calc(50% - 37.5px);
+    }
+    .fruit-cup .juice {
+      height: 25%;
+      max-height: 25%;
+      width: 100%;
+      background-color: var(--juice);
+      pointer-events: none;
+      animation: add-in 1s linear;
+      text-align: center;
+      position: relative;
+    }
+    @keyframes add-in {
+      from {
+        height: 0;
+      }
+      to {
+        height: 25%;
+      }
+    }
+    @keyframes dumping {
+      0% {
+        transform: rotate(0deg);
+      }
+      15% {
+        position: absolute;
+        bottom: 550px;
+        left: calc(50% + 50px);
+      }
+      50% {
+        position: absolute;
+        bottom: 330px;
+        left: calc(50% + 40px);
+        transform: rotate(0deg);
+      }
+      100% {
+        position: absolute;
+        bottom: 330px;
+        left: calc(50% + 40px);
+        transform: rotate(-95deg);
+      }
+    }
+    @keyframes fall {
+      from {
+        border-width: 35px 0px 45px 35px;
+        opacity: 1;
+      }
+      to {
+        border-width: 105px 0px 45px 65px;
+        opacity: 1;
+      }
+    }
+    @keyframes fall2 {
+      from {
+        height: 60px;
+      }
+      to {
+        height: calc(var(--cup-h) - var(--border));
+      }
+    }
+    @keyframes fall3 {
+      0% {
+        height: 0;
+      }
+      50% {
+        height: 80px;
+      }
+      100% {
+        height: 80px;
+      }
+    }
+    .modal {
+      position: absolute;
+      z-index: 99;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      display: none;
+    }
+    .modal-wrapper {
+      width: 360px;
+      min-height: 170px;
+      background-color: white;
+      border-radius: 20px;
+      position: absolute;
+      left: calc(50% - 180px);
+      border: 2px solid #eee;
+      padding: 15px;
+      box-sizing: border-box;
+      color: #666;
+      text-align: center;
+      z-index: 1;
+    }
+    .modal-title {
+      color: #333;
+      font-size: 17px;
+      line-height: 1.5;
+    }
+    .modal-body {
+      margin-top: 10px;
+      padding-left: 100px;
+      font-size: 14px;
+      text-align: left;
+    }
+    .modal-mask {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    .modal-footer {
+      text-align: right;
+      margin-top: 15px;
+      display: none;
+    }
+    .modal-footer .button {
+      padding: 3px 8px;
+      border: 1px solid #efefef;
+      display: inline-block;
+      border-radius: 5px;
+      font-size: 12px;
+      cursor: pointer;
+    }
+    .modal-footer .next {
+      display: none;
+      background-color: #4d98ff;
+      color: white;
+    }
+    .modal-footer .button:nth-child(3) {
+      background-color: #dc3023;
+      color: white;
+    }
+    .game-info {
+      position: absolute;
+      width: calc(100% - 30px);
+      bottom: 15px;
+      padding: 0 30px;
+      box-sizing: border-box;
+      display: flex;
+      justify-content: space-between;
+      line-height: 36px;
+      height: 36px;
+    }
+    .countdown {
+      width: 47px;
+      height: 47px;
+      position: relative;
+      top: -11px;
+      border-radius: 100%;
+      background-color: #fff;
+    }
+    .countdown text {
+      width: 22.5px;
+      text-align: center;
+    }
+    #timer {
+      stroke-dasharray: 141;
+      /* animation-timing-function: linear;
+      animation-duration: 30s; */
+      /* animation: rotate 30s linear; */
+    }
+    @keyframes rotate {
+      0% {
+        stroke-dashoffset: 0;
+      }
+      100% {
+        stroke-dashoffset: 141;
+      }
+    }
+  </style>
+  <style>
+    .step1 h1 {
+      text-align: center;
+      font-size: 7rem;
+      font-family: "Yuanti SC", sans-serif;
+      /* text-shadow: 3px 3px 0px #eb452b, 6px 6px 0px #efa032, 9px 9px 0px #46b59b,
+        12px 12px 0px #017e7f, 15px 15px 0px #052939, 18px 18px 0px #c11a2b,
+        21px 21px 0px #c11a2b, 24px 24px 0px #c11a2b, 27px 27px 0px #c11a2b; */
+      background-image: url("https://img1.baidu.com/it/u=3813004339,4064910189&fm=253&fmt=auto&app=138&f=JPEG?w=750&h=500");
+      -webkit-background-clip: text;
+      /* -webkit-text-stroke: 2px #000000; */
+      -webkit-text-fill-color: transparent;
+    }
+    .step1 .ctrl-btns {
+      margin-top: 200px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .step1 .ctrl-button {
+      width: 220px;
+      height: 50px;
+      line-height: 50px;
+      border-radius: 50px;
+      text-align: center;
+      margin-bottom: 32px;
+      background-color: var(--bg);
+      color: var(--color);
+      border-bottom: 3px solid var(--color);
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 4px 15px 0 var(--bg);
+      letter-spacing: 8px;
+    }
+    .step1 .ctrl-button:hover {
+      /* background-image: linear-gradient(45deg, transparent 50%, var(--bg)); */
+      /* transition: all 1s ease-in-out; */
+    }
+    .step2 .title {
+      font-size: 22px;
+      text-align: center;
+      line-height: 80px;
+    }
+    .step2 .fruit-cup {
+      transform: scale(2);
+      top: 260px;
+    }
+    .fruit-cup .juice .svg-icon {
+      --size: 1.5em;
+      width: var(--size);
+      height: 100%;
+      position: absolute;
+      left: calc((100% - var(--size)) / 2);
+    }
+    .fruit-cup .adorn {
+      width: 3em;
+      height: 3em;
+      position: absolute;
+      top: -1.5em;
+      right: -1.5em;
+    }
+
+    .step2 .countdown {
+      position: absolute;
+      top: 50px;
+      right: 50px;
+    }
+    .step3,
+    .step2 {
+      display: none;
+    }
+    .modal .fruit-cup {
+      transform: scale(0.5);
+      bottom: 5px;
+      left: -5px;
+    }
+  </style>
+  <body>
+    <div id="main">
+      <div class="step1">
+        <h1>清凉一夏</h1>
+        <div class="ctrl-btns">
+          <div
+            class="ctrl-button"
+            style="--bg: #00bc12; --color: #01710d"
+            onclick="game.startGame(1)"
+          >
+            简单
+          </div>
+          <div
+            class="ctrl-button"
+            style="--bg: #ffc773; --color: #b46d04"
+            onclick="game.startGame(2)"
+          >
+            较难
+          </div>
+          <div
+            class="ctrl-button"
+            style="--bg: #f64a3e; --color: #9a0c02"
+            onclick="game.startGame(3)"
+          >
+            超难
+          </div>
+        </div>
+      </div>
+      <div class="step2">
+        <div class="title">给我调配一杯饮料吧！记住果汁的顺序哦</div>
+        <div class="fruit-cup">
+          <div class="cup-inner"></div>
+        </div>
+        <div class="countdown">
+          <svg>
+            <path
+              id="timer"
+              d="M 25.5 3 A 4.5 4.5 90 0 0 25.5 48 A 4.5 4.5 90 0 0 25.5 3 Z"
+              fill="transparent"
+              stroke="black"
+              strokeDasharray="141"
+            ></path>
+            <text x="15" y="30" fill="#666"></text>
+          </svg>
+        </div>
+      </div>
+      <div class="step3">
+        <div class="cups">
+          <!-- <div class="empty-cup"></div>
+        <div class="empty-cup"><div class="juice"></div></div>
+        <div class="empty-cup dumping"><div class="juice"></div></div> -->
+        </div>
+        <div class="fruit-cup">
+          <div class="cup-inner">
+            <!-- <div class="juice" style="--juice: #ffa631"></div>
+          <div class="juice" style="--juice: #057748"></div>
+          <div class="juice" style="--juice: #ff0097"></div>
+          <div class="juice" style="--juice: #ff0097"></div>
+          <div class="juice" style="--juice: #ff0097"></div>
+          <div class="juice" style="--juice: #ffa631"></div> -->
+          </div>
+        </div>
+        <div class="game-info">
+          <div class="score">得分：<span class="score-num">0</span></div>
+          <div class="countdown">
+            <svg>
+              <path
+                id="timer"
+                d="M 25.5 3 A 4.5 4.5 90 0 0 25.5 48 A 4.5 4.5 90 0 0 25.5 3 Z"
+                fill="transparent"
+                stroke="black"
+                strokeDasharray="141"
+              ></path>
+              <text x="15" y="30" fill="#666"></text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="modal">
+        <div class="modal-wrapper">
+          <div class="modal-title">提示信息</div>
+          <div class="modal-body">恭喜你通关，调配的果汁很不错哦！</div>
+          <div class="fruit-cup">
+            <div class="cup-inner"></div>
+          </div>
+          <div class="modal-footer">
+            <div class="button" onclick="game.exit()">重新选择难度</div>
+            <div class="button next" onclick="game.nextGame()">下一题</div>
+            <div class="button" onclick="game.restartGame()">重新游戏</div>
+          </div>
+        </div>
+        <div class="modal-mask"></div>
+      </div>
+    </div>
+  </body>
+  <script>
+    // console.log(document.getElementById("line").getTotalLength());
+  </script>
+  <script>
+    class Modal {
+      constructor() {
+        this.visible = false;
+        this.title = "";
+        this.content = "";
+        this.showFooter = false;
+        this.dom = document.querySelector(".modal");
+      }
+      showModal({
+        title = "",
+        content = "",
+        showFooter = false,
+        showNext = false,
+      }) {
+        this.visible = true;
+        this.dom.style.display = "flex";
+
+        this.title = title;
+        this.setTitle();
+
+        this.content = content;
+        this.setContent();
+
+        this.showFooter = showFooter;
+        this.dom.querySelector(".modal-footer").style.display = showFooter
+          ? "block"
+          : "none";
+
+        this.showNext = showNext;
+        console.log(showNext);
+        this.dom.querySelector(".modal-footer .next").style.display = showNext
+          ? "inline-block"
+          : "none";
+      }
+      hideModal() {
+        this.visible = false;
+        this.dom.style.display = "none";
+      }
+      setTitle() {
+        this.dom.querySelector(".modal-title").innerHTML = this.title;
+      }
+      setContent() {
+        this.dom.querySelector(".modal-body").innerHTML = this.content;
+      }
+    }
+    const modalUtil = new Modal();
+    class Game {
+      constructor() {
+        this.simpleLevel = 0; // 难易度
+        this.level = 0; // 果汁层数
+        this.currentScore = 0; // 当前通关分数
+        this.remmenberTime = 15; // 记忆时间15秒
+        this.initState();
+        this.timeout1 = null;
+        this.timeout2 = null;
+      }
+      /**数据初始化*/
+      initState(isNext = false) {
+        if (!isNext) {
+          this.score = 0; // 得分
+          this.setScore();
+        }
+
+        this.timeLimit = 30; // 调配时间限制30秒
+        this.isLife = true; // 游戏是否进行中
+
+        if (this.timer) {
+          clearInterval(this.timer);
+        }
+        this.timer = null; // 计时器
+        this.juices = [
+          { title: "猕猴桃", color: "#00bc12", icon: "icon-mihoutao" },
+          { title: "樱桃", color: "#f00056", icon: "icon-yingtao" },
+          { title: "香蕉", color: "#ffc773", icon: "icon-xiangjiao" },
+          { title: "苹果", color: "#dc3023", icon: "icon-pingguo" },
+          { title: "橘子", color: "#ff7500", icon: "icon-juzi" },
+          { title: "葡萄", color: "#801dae", icon: "icon-putao" },
+          { title: "椰子", color: "#edd1d8", icon: "icon-yezi" },
+          { title: "青提", color: "#7bcfa6", icon: "icon-tizi" },
+          { title: "草莓", color: "rgb(255, 0, 75)", icon: "icon-icon-test" },
+          { title: "蓝莓", color: "rgb(89, 152, 216)", icon: "icon-lanmei" },
+        ];
+        this.cupDom = document.querySelector(".step3 .cup-inner");
+        this.cups = document.querySelector(".step3 .cups");
+        this.fruitJuice = [];
+        this.yourJuice = [];
+        this.cupDom.innerHTML = "";
+        document.querySelector(".step2 .cup-inner").innerHTML = "";
+      }
+      /**开始游戏*/
+      startGame(level = this.simpleLevel) {
+        this.setLevel(level);
+        document.querySelector(".step1").style.display = "none";
+        document.querySelector(".step2").style.display = "block";
+        document.querySelector(".step3").style.display = "none";
+        // this.init();
+        this.getFruitJuice();
+      }
+      /**生成果汁*/
+      getFruitJuice() {
+        console.log(this.level);
+        const juices = [...this.juices];
+        const cupDom = document.querySelector(".step2 .cup-inner");
+        for (let i = 0; i < this.level; i++) {
+          const index = Math.floor(Math.random() * juices.length);
+          this.fruitJuice.push(juices[index]);
+          const juice = document.createElement("div");
+          juice.className = "juice";
+          juice.style = `--juice: ${juices[index].color};`;
+          juice.innerHTML = `<svg class="icon svg-icon" aria-hidden="true" style="--i: ${
+            this.level - 1 - i
+          }">
+                <use xlink:href="#${juices[index].icon}"></use>
+              </svg>`;
+          if (document.querySelector(".step2 .cup-inner .juice")) {
+            cupDom.insertBefore(
+              juice,
+              document.querySelector(".step2 .cup-inner .juice"),
+            );
+          } else {
+            console.log("append");
+            cupDom.appendChild(juice);
+          }
+          juices.splice(index, 1);
+        }
+        document.querySelector(".modal .cup-inner").innerHTML =
+          document.querySelector(".step2 .cup-inner").innerHTML;
+        this.remmenberCountdown();
+      }
+      /**记忆倒计时*/
+      remmenberCountdown() {
+        let timeLimit = this.remmenberTime;
+        const line = document.querySelector(".step2 .countdown #timer");
+        line.style.animation = `rotate ${timeLimit}s linear`;
+        // line.style.animationTimingFunction = "linear";
+        // line.style.animationDuration = "30s";
+        document.querySelector(".step2 .countdown text").innerHTML = timeLimit;
+        const timer = setInterval(() => {
+          if (timeLimit > 0) {
+            timeLimit -= 1;
+            document.querySelector(".step2 .countdown text").innerHTML =
+              timeLimit;
+          }
+          if (timeLimit == 0) {
+            clearInterval(timer);
+            this.init();
+          }
+        }, 1000);
+      }
+      /**开始游戏初始化*/
+      init() {
+        document.querySelector(".step1").style.display = "none";
+        document.querySelector(".step2").style.display = "none";
+        document.querySelector(".step3").style.display = "block";
+        this.initScene();
+        this.countDown();
+      }
+      /**退出游戏*/
+      exit() {
+        modalUtil.hideModal();
+        document.querySelector(".step1").style.display = "block";
+        document.querySelector(".step3").style.display = "none";
+        this.initState();
+      }
+      /** 下一题*/
+      nextGame() {
+        modalUtil.hideModal();
+        this.initState(true);
+        this.startGame();
+      }
+      /** 重新游戏，难易度不变 */
+      restartGame() {
+        modalUtil.hideModal();
+        this.initState();
+        this.startGame();
+      }
+      /**场景初始化*/
+      initScene() {
+        const juices = [...this.juices];
+        for (let i = 0; i < juices.length; i++) {
+          const index = Math.floor(Math.random() * juices.length);
+          const val = juices[index];
+          juices[index] = juices[i];
+          juices[i] = val;
+        }
+        const dom = this.cups;
+        let html = "";
+        juices.forEach((item) => {
+          if (item.color) {
+            html += `<div class="empty-cup full-in" data-color="${item.color}" data-icon="${item.icon}" data.title="${item.title}">
+            <div class="juice" style="--juice: ${item.color};">
+              <svg class="icon svg-icon" aria-hidden="true">
+                <use xlink:href="#${item.icon}"></use>
+              </svg>
+            </div>
+          </div>`;
+          } else {
+            html += '<div class="empty-cup"></div>';
+          }
+        });
+        dom.innerHTML = html;
+        this.addEvent();
+      }
+      /**计算分数*/
+      checkCorrect() {
+        if (this.yourJuice.length == this.fruitJuice.length) {
+          let flag = true;
+          for (let i = 0; i < this.yourJuice.length; i++) {
+            if (this.yourJuice[i].color !== this.fruitJuice[i].color) {
+              this.gameOver("很遗憾，你调的果汁不对哦！");
+              flag = false;
+              break;
+            }
+          }
+          if (flag) {
+            this.score += this.currentScore;
+            this.setScore();
+            this.gameOver("恭喜你通关，调配的果汁很不错哦！", true);
+          }
+        }
+      }
+      /**设置分数*/
+      setScore() {
+        document.querySelector(".step3 .score-num").innerText = this.score;
+      }
+      /**事件初始化*/
+      addEvent() {
+        const eles = document.querySelectorAll(".empty-cup");
+        let count = 0;
+        eles.forEach((item) => {
+          item.addEventListener("click", (e) => {
+            if (!this.isLife) return;
+            if (this.fruitJuice.length > 0 && count >= this.fruitJuice.length)
+              return;
+            if (item.className.indexOf("full-in") > -1) {
+              const prev = item.className;
+              item.className = `${prev} dumping`;
+              const cupDom = this.cupDom;
+              count++;
+              this.timeout1 = setTimeout(() => {
+                const juice = document.createElement("div");
+                juice.className = "juice";
+                juice.style = `--juice: ${item.dataset.color};`;
+                juice.innerHTML = `<svg class="icon svg-icon" aria-hidden="true" style="--i: ${
+                  this.fruitJuice.length - this.yourJuice.length - 1
+                }">
+                  <use xlink:href="#${item.dataset.icon}"></use>
+                </svg>`;
+                if (document.querySelector(".step3 .cup-inner .juice")) {
+                  cupDom.insertBefore(
+                    juice,
+                    document.querySelector(".step3 .cup-inner .juice"),
+                  );
+                } else {
+                  cupDom.appendChild(juice);
+                }
+              }, 2000);
+              this.timeout2 = setTimeout(() => {
+                this.yourJuice.push({ ...item.dataset });
+                item.className = "empty-cup";
+                item.innerHTML = "";
+                setTimeout(() => {
+                  this.checkCorrect();
+                }, 100);
+              }, 3000);
+            }
+          });
+        }, true);
+      }
+      /**调配倒计时*/
+      countDown() {
+        let timeLimit = this.timeLimit;
+        const line = document.querySelector(".step3 .countdown #timer");
+        line.style.animation = `rotate ${timeLimit}s linear`;
+        // line.style.animationTimingFunction = "linear";
+        // line.style.animationDuration = "30s";
+        document.querySelector(".step3 .countdown text").innerHTML = timeLimit;
+        this.timer = setInterval(() => {
+          if (timeLimit > 0) {
+            timeLimit -= 1;
+            document.querySelector(".step3 .countdown text").innerHTML =
+              timeLimit;
+          }
+          if (timeLimit == 0) {
+            clearInterval(this.timer);
+            const result = this.checkCorrect();
+            this.gameOver("时间到!游戏结束");
+          }
+        }, 1000);
+      }
+      /**游戏结束*/
+      gameOver(str, showNext = false) {
+        this.isLife = false;
+        modalUtil.showModal({
+          title: "提示信息",
+          content: str + `</br>你的最终得分：<strong>${this.score}</strong>`,
+          showFooter: true,
+          showNext,
+        });
+        document.querySelector(".step3 .countdown #timer").style.animation = "";
+        if (this.timer) {
+          clearInterval(this.timer);
+        }
+        if (this.timeout1) {
+          clearTimeout(this.timeout1);
+        }
+        if (this.timeout2) {
+          clearTimeout(this.timeout2);
+        }
+      }
+      /**设置游戏等级*/
+      setLevel(level) {
+        // 设置游戏等级
+        this.simpleLevel = level;
+        switch (level) {
+          case 1:
+            this.level = 3;
+            this.currentScore = 30;
+            this.remmenberTime = 5;
+            break;
+          case 2:
+            this.level = 5;
+            this.currentScore = 50;
+            this.remmenberTime = 8;
+            break;
+          case 3:
+            this.level = 7;
+            this.currentScore = 70;
+            this.remmenberTime = 15;
+            break;
+        }
+      }
+    }
+    const game = new Game();
+    // game.init();
+  </script>
+</html>
