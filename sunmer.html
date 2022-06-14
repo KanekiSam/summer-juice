@@ -390,27 +390,67 @@
       left: -5px;
     }
   </style>
+  <style>
+    .hvr-sweep-to-right {
+      display: inline-block;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+      -webkit-transition-duration: 0.3s;
+      transition-duration: 0.3s;
+    }
+    .hvr-sweep-to-right:before {
+      content: "";
+      position: absolute;
+      z-index: -1;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        to right,
+        transparent 50%,
+        rgba(255, 255, 255, 0.3)
+      );
+      -webkit-transform: scaleX(0);
+      transform: scaleX(0);
+      -webkit-transform-origin: 0 50%;
+      transform-origin: 0 50%;
+      -webkit-transition-property: transform;
+      transition-property: transform;
+      -webkit-transition-duration: 0.3s;
+      transition-duration: 0.3s;
+      -webkit-transition-timing-function: ease-out;
+      transition-timing-function: ease-out;
+      border-radius: 50px;
+    }
+    .hvr-sweep-to-right:hover:before,
+    .hvr-sweep-to-right:focus:before,
+    .hvr-sweep-to-right:active:before {
+      -webkit-transform: scaleX(1);
+      transform: scaleX(1);
+    }
+  </style>
   <body>
     <div id="main">
       <div class="step1">
         <h1>清凉一夏</h1>
         <div class="ctrl-btns">
           <div
-            class="ctrl-button"
+            class="ctrl-button hvr-sweep-to-right"
             style="--bg: #00bc12; --color: #01710d"
             onclick="game.startGame(1)"
           >
             简单
           </div>
           <div
-            class="ctrl-button"
+            class="ctrl-button hvr-sweep-to-right"
             style="--bg: #ffc773; --color: #b46d04"
             onclick="game.startGame(2)"
           >
             较难
           </div>
           <div
-            class="ctrl-button"
+            class="ctrl-button hvr-sweep-to-right"
             style="--bg: #f64a3e; --color: #9a0c02"
             onclick="game.startGame(3)"
           >
