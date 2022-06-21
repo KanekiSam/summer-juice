@@ -22,7 +22,7 @@
       position: relative;
     }
     .cups {
-      margin-bottom: 60px;
+      margin: 60px 0;
     }
     .empty-cup {
       width: var(--cup-w);
@@ -430,8 +430,32 @@
       transform: scaleX(1);
     }
   </style>
+  <style>
+    .music-config {
+      position: absolute;
+      left: 40px;
+      top: 30px;
+      z-index: 100;
+    }
+    .music-config .icon {
+      font-size: 36px;
+      color: #666;
+    }
+  </style>
   <body>
     <div id="main">
+      <div class="music-config">
+        <span
+          class="icon iconfont icon-shengyinguanbi"
+          style="display: block"
+          onclick="musicUtil.play()"
+        ></span>
+        <span
+          class="icon iconfont icon-shengyin"
+          style="display: none"
+          onclick="musicUtil.pause()"
+        ></span>
+      </div>
       <div class="step1">
         <h1>清凉一夏</h1>
         <div class="ctrl-btns">
@@ -524,11 +548,62 @@
         <div class="modal-mask"></div>
       </div>
     </div>
+    <audio id="bg-music" src="./mp3/快乐乌库勒.mp3" loop preload="auto"></audio>
+    <audio id="click-music" src="./mp3/click-music.mp3" preload="auto"></audio>
+    <audio id="water-music" src="./mp3/water.mp3" preload="auto"></audio>
+    <audio id="fair-music" src="./mp3/fair.mp3" preload="auto"></audio>
+    <audio id="win-music" src="./mp3/win2.mp3" preload="auto"></audio>
+    <audio id="click2-music" src="./mp3/click2.mp3" preload="auto"></audio>
   </body>
   <script>
     // console.log(document.getElementById("line").getTotalLength());
   </script>
   <script>
+    class Music {
+      constructor() {
+        this.bgMusic = document.getElementById("bg-music");
+        this.clickMusic = document.getElementById("click-music");
+        this.waterMusic = document.getElementById("water-music");
+        this.winMusic = document.getElementById("win-music");
+        this.fairMusic = document.getElementById("fair-music");
+        this.clickMusic2 = document.getElementById("click2-music");
+      }
+      play() {
+        this.bgMusic.play();
+        document.querySelector(".icon-shengyin").style.display = "block";
+        document.querySelector(".icon-shengyinguanbi").style.display = "none";
+      }
+      pause() {
+        this.bgMusic.pause();
+        document.querySelector(".icon-shengyin").style.display = "none";
+        document.querySelector(".icon-shengyinguanbi").style.display = "block";
+      }
+      volumeCtrl(volume) {
+        this.bgMusic.volume = volume;
+      }
+      clickPlay() {
+        this.clickMusic.play();
+      }
+      waterPlay(play = true) {
+        if (!play) {
+          this.waterMusic.pause();
+          this.waterMusic.currentTime = 0;
+        } else {
+          this.waterMusic.play();
+        }
+      }
+      yourWin(bool = true) {
+        this.volumeCtrl(0.2);
+        (bool ? this.winMusic : this.fairMusic).play();
+        setTimeout(() => {
+          this.volumeCtrl(1);
+        }, 1000);
+      }
+      commonClick() {
+        this.clickMusic2.play();
+      }
+    }
+    const musicUtil = new Music();
     class Modal {
       constructor() {
         this.visible = false;
@@ -621,6 +696,7 @@
       /**开始游戏*/
       startGame(level = this.simpleLevel) {
         this.setLevel(level);
+        musicUtil.clickPlay();
         document.querySelector(".step1").style.display = "none";
         document.querySelector(".step2").style.display = "block";
         document.querySelector(".step3").style.display = "none";
@@ -688,6 +764,7 @@
       }
       /**退出游戏*/
       exit() {
+        musicUtil.commonClick();
         modalUtil.hideModal();
         document.querySelector(".step1").style.display = "block";
         document.querySelector(".step3").style.display = "none";
@@ -695,12 +772,14 @@
       }
       /** 下一题*/
       nextGame() {
+        musicUtil.commonClick();
         modalUtil.hideModal();
         this.initState(true);
         this.startGame();
       }
       /** 重新游戏，难易度不变 */
       restartGame() {
+        musicUtil.commonClick();
         modalUtil.hideModal();
         this.initState();
         this.startGame();
@@ -773,6 +852,7 @@
               this.yourJuice.push({ ...item.dataset });
 
               this.timeout1 = setTimeout(() => {
+                musicUtil.waterPlay();
                 const juice = document.createElement("div");
                 juice.className = "juice";
                 juice.style = `--juice: ${item.dataset.color};`;
@@ -791,6 +871,7 @@
                 }
               }, 2000);
               this.timeout2 = setTimeout(() => {
+                musicUtil.waterPlay(false);
                 count++;
                 item.className = "empty-cup";
                 item.innerHTML = "";
@@ -835,6 +916,7 @@
           showFooter: true,
           showNext,
         });
+        musicUtil.yourWin(showNext);
         document.querySelector(".step3 .countdown #timer").style.animation = "";
         if (this.timer) {
           clearInterval(this.timer);
