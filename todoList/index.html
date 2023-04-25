@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ToDoList</title>
+        <link rel="stylesheet" type="text/css" href="./css/index.css" />
+    </head>
+    <body>
+        <div class="main">
+            <div class="content">
+                <div class="bearLoadMan">
+                    <div class="talkBox"></div>
+                    <div class="todoList"></div>
+                    <div class="sweat"></div>
+                    <div class="sweat"></div>
+                    <div class="sweat"></div>
+                </div>
+                <div class="editBox">
+                    <div class="head">ToDoList</div>
+                    <div class="input">
+                        <input id="addText" placeholder="add" maxlength="8" />
+                        <div class="addBtn" onclick="addToDo()"></div>
+                        <div id="inputErr"></div>
+                    </div>
+                    <div class="editInfo">
+                        <div class="showList history">
+                            <div class="title">完成情况</div>
+                            <div class="list">
+                                <div class="coutitem">
+                                    完成率：<span class="doneNum">0</span>%
+                                </div>
+                                <div class="coutitem">
+                                    废弃率：<span class="discardNum">0</span>%
+                                </div>
+                            </div>
+                        </div>
+                        <div class="scrollInner">
+                            <div class="showList doneList">
+                                <div class="title">已完成</div>
+                                <div class="list"></div>
+                            </div>
+                            <div class="showList discardList">
+                                <div class="title">已废弃</div>
+                                <div class="list"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </body>
+    <script src="./js/jquery-3.1.1.min.js"></script>
+    <script src="./js/index.js"></script>
+</html>

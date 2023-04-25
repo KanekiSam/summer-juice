@@ -1,0 +1,244 @@
+.main .content {
+  margin: 100px auto;
+  width: 600px;
+  height: 520px;
+  position: relative;
+}
+.main .content .bearLoadMan {
+  width: 300px;
+  height: 100%;
+  position: absolute;
+  left: -200px;
+  z-index: 11;
+  background-image: url(../img/搬砖鸭2.png);
+  background-repeat: no-repeat;
+  background-position: 50% 100%;
+  background-size: contain;
+}
+.main .content .bearLoadMan .todoList {
+  position: absolute;
+  left: calc(50% - 60px);
+  bottom: 26%;
+}
+.main .content .bearLoadMan .todoList .item {
+  width: 114px;
+  height: 30px;
+  line-height: 30px;
+  font-size: 13px;
+  background-color: #eea77d;
+  background-image: radial-gradient(#c27b51 10%, transparent 0);
+  background-size: 15px 15px;
+  background-position: 0 0;
+  border: 4px solid #000;
+  text-align: center;
+  position: relative;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn {
+  width: 16px;
+  height: 16px;
+  position: absolute;
+  right: -8px;
+  top: 7px;
+  border-radius: 100%;
+  background-color: white;
+  border: 1px solid #bbb;
+  display: none;
+  justify-content: space-between;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn .del,
+.main .content .bearLoadMan .todoList .item .ctrlBtn .done {
+  display: none;
+  cursor: pointer;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn:hover {
+  width: 36px;
+  right: -18px;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn:hover .del,
+.main .content .bearLoadMan .todoList .item .ctrlBtn:hover .done {
+  display: block;
+  width: 16px;
+  height: 16px;
+  border-radius: 100%;
+  background-color: #333;
+  background-image: url(../svg/close.svg);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 80%;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn:hover .done {
+  background-image: url(../svg/check.svg);
+  background-color: green;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn.done {
+  background-image: url(../svg/check.svg);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 80%;
+  background-color: green;
+}
+.main .content .bearLoadMan .todoList .item .ctrlBtn.done .del,
+.main .content .bearLoadMan .todoList .item .ctrlBtn.done .done {
+  display: none;
+}
+.main .content .bearLoadMan .todoList .item:hover .ctrlBtn {
+  display: flex;
+}
+.main .content .bearLoadMan .talkBox {
+  width: 150px;
+  height: 80px;
+  border-radius: 100px;
+  background-color: #fff;
+  box-shadow: 3px 3px 20px 18px #efefef;
+  position: absolute;
+  top: 40px;
+  left: -30px;
+  transform: rotate(-15deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  padding: 0 15px;
+}
+.main .content .bearLoadMan .talkBox::before {
+  content: '';
+  display: block;
+  width: 0;
+  border: 15px solid transparent;
+  border-top-color: white;
+  border-right-width: 5px;
+  position: absolute;
+  bottom: -45px;
+  border-top-width: 30px;
+  left: calc(50% - 10px);
+}
+.main .content .bearLoadMan::after {
+  content: '';
+  display: block;
+  width: 100px;
+  height: 22px;
+  border-radius: 100%;
+  background-color: #dddbdb;
+  filter: blur(6px);
+  position: absolute;
+  bottom: -20px;
+  left: calc(50% - 50px);
+}
+.main .content .bearLoadMan .sweat {
+  width: 4px;
+  height: 6px;
+  border-radius: 100%;
+  border: 1.5px solid #bbb;
+  border-top: none;
+  position: absolute;
+  bottom: var(--bottom);
+  animation: slowDown 0.5s linear infinite;
+  display: none;
+}
+.main .content .bearLoadMan .sweat:nth-child(3) {
+  left: 45px;
+  --bottom: 180px;
+}
+.main .content .bearLoadMan .sweat:nth-child(4) {
+  left: 70px;
+  --bottom: 240px;
+  animation-delay: 0.2s;
+}
+.main .content .bearLoadMan .sweat:nth-child(5) {
+  right: 60px;
+  animation-delay: 0.4s;
+  --bottom: 200px;
+}
+@keyframes slowDown {
+  to {
+    bottom: calc(var(--bottom) - 2px);
+  }
+}
+.main .content .editBox {
+  width: 600px;
+  height: 100%;
+  border: 1px solid #eee;
+  border-radius: 20px;
+  box-shadow: 3px 3px 10px 8px #efefef;
+}
+.main .content .editBox .head {
+  font-size: 44px;
+  font-weight: 900;
+  text-align: center;
+  margin-top: 15px;
+}
+.main .content .editBox .input {
+  text-align: center;
+  border-bottom: 1px solid #bbb;
+  position: relative;
+  padding: 10px 0;
+}
+.main .content .editBox .input input {
+  width: 360px;
+  height: 52px;
+  border-radius: 52px;
+  line-height: 52px;
+  margin: 5px auto;
+  display: inline-block;
+  padding: 0 15px;
+  text-align: center;
+  font-size: 16px;
+  box-sizing: border-box;
+  border-width: 4px;
+  border-style: solid;
+}
+.main .content .editBox .input .addBtn {
+  position: absolute;
+  right: calc((100% - 360px) / 2);
+  top: 15px;
+  width: 52px;
+  height: 52px;
+  background-image: url(../svg/add.svg);
+  background-repeat: no-repeat;
+  background-position: 50%;
+  background-size: 80%;
+  background-color: black;
+  border-radius: 100%;
+}
+.main .content .editBox .input #inputErr {
+  color: red;
+  text-align: center;
+  font-size: 12px;
+}
+.main .content .editBox .editInfo {
+  padding: 30px;
+  height: calc(100% - 61.5px - 87px - 60px - 15px);
+  padding-left: 120px;
+}
+.main .content .editBox .editInfo .scrollInner {
+  height: calc(100% - 81px);
+  overflow-y: auto;
+}
+.main .content .editBox .editInfo .showList.doneList,
+.main .content .editBox .editInfo .showList.discardList {
+  display: none;
+}
+.main .content .editBox .editInfo .showList .title {
+  line-height: 36px;
+}
+.main .content .editBox .editInfo .showList .list {
+  display: flex;
+  flex-wrap: wrap;
+}
+.main .content .editBox .editInfo .showList .list .item {
+  line-height: 30px;
+  padding: 0 15px;
+  margin: 7.5px;
+  font-size: 14px;
+  border: 1px solid #bbb;
+  border-radius: 30px;
+}
+.main .content .editBox .editInfo .showList .list .item .ctrlBtn {
+  display: none;
+}
+.main .content .editBox .editInfo .showList .list .coutitem {
+  line-height: 30px;
+  padding: 0 15px;
+  margin: 7.5px;
+  font-size: 14px;
+}
