@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>词云生成器</title>
+</head>
+<style>
+    canvas {
+        border: 1px solid rgb(195, 194, 194);
+    }
+
+    #canvas {
+        position: relative;
+        z-index: 1;
+    }
+
+    #imgCanvas {
+        position: absolute;
+        left: 8px;
+        opacity: 0.6;
+    }
+</style>
+
+<body>
+    <canvas id="canvas"></canvas>
+    <canvas id="imgCanvas"></canvas>
+    <script>
+        (function () {
+            class WordCloudGenerator {
+                constructor(options) {
+                    this.options = options;
+                    this.max = 65;
+                    this.min = 12;
+                    this.canvas = document.getElementById('canvas')
+                    this.ctx = canvas.getContext('2d')
+                    this.imgCanvas = document.getElementById('imgCanvas')
+                    this.imgctx = imgCanvas.getContext('2d')
+                    this.init();
+                }
+                init() {
+                    const $this = this;
+                    const img = new Image()
+                    img.src = './lufei.png';
+                    img.onload = function () {
+                        $this.initCanvasData(this)
+                    }
+                }
+                initCanvasData(img) {
+                    const rate = img.height / img.width
+                    const width = 500;
+                    const height = 500 * rate;
+                    this.canvas.width = width
+                    this.canvas.height = height
+
+                    this.imgCanvas.width = width
+                    this.imgCanvas.height = height
+                    this.imgctx.drawImage(img, 0, 0, this.imgCanvas.width, this.imgCanvas.height)
+
+                    this.getCanvasData(this.imgCanvas);
+                }
+                getCanvasData() {
+                    const data = this.imgctx.getImageData(
+                        0,
+                        0,
+                        this.imgCanvas.width,
+                        this.imgCanvas.height,
+                    ).data;
+                    const gap = 4;
+                    const points = [];
+                    const length = data.length;
+                    let min_x = 0, max_x = 0;
+                    let min_y = 0, max_y = 0;
+                    for (let i = 0, wl = this.imgCanvas.width * gap; i < length; i += gap) {
+                        if (data[i + gap - 1]) {
+                            // 根据透明度判断
+                            const x = (i % wl) / gap;
+                            const y = Math.ceil(i / wl);
+                            points.push([x, y]);
+                            if (x < min_x) min_x = x;
+                            if (x > max_x) max_x = x;
+                            if (y < min_y) min_y = y;
+                            if (y > max_y) max_y = y;
+                        }
+                    }
+                    this.textPoints = [...points];
+                    // 计算中心点
+                    const centerY = (max_y - min_y) / 2;
+                    const list = this.textPoints.filter(item => item[1] == centerY).sort((a, b) => a[0] - b[0]);
+                    const cross = Math.abs(list[0][0] - list[list.length - 1][0]); // 横
+                    const article = max_y - min_y; // 竖
+                    const centerX = list[list.length / 2][0];
+                    console.log(centerX, centerY)
+                    this.ctx.beginPath();
+                    this.ctx.arc(centerX, centerY, 5, 0, Math.PI * 2)
+                    this.ctx.fill();
+                    console.log(cross, article)
+                    this.centerX = centerX;
+                    this.centerY = centerY;
+                    this.drawText({ size: this.max, text: this.options.centerWord, x: this.centerX, y: this.centerY, article: article > cross })
+                }
+                drawTextVertical(context, text, x, y) {
+                    var arrText = text.split('');
+                    var arrWidth = arrText.map(function (letter) {
+                        // return 26;
+                        // 这里为了找到那个空格的 bug 做了许多努力，不过似乎是白费力了
+                        const metrics = context.measureText(letter);
+                        console.log(metrics);
+                        const width = metrics.width;
+                        return width;
+                    });
+                    var align = context.textAlign;
+                    var baseline = context.textBaseline;
+                    if (align == 'left') {
+                        x = x + Math.max.apply(null, arrWidth) / 2;
+                    } else if (align == 'right') {
+                        x = x - Math.max.apply(null, arrWidth) / 2;
+                    }
+                    if (baseline == 'bottom' || baseline == 'alphabetic' || baseline == 'ideographic') {
+                        y = y - arrWidth[0] / 2;
+                    } else if (baseline == 'top' || baseline == 'hanging') {
+                        y = y + arrWidth[0] / 2;
+                    }
+                    context.textAlign = 'center';
+                    context.textBaseline = 'middle';
+                    // 开始逐字绘制
+                    arrText.forEach(function (letter, index) {
+                        // 确定下一个字符的纵坐标位置
+                        var letterWidth = arrWidth[index];
+                        // 是否需要旋转判断
+                        var code = letter.charCodeAt(0);
+                        if (code <= 256) {
+                            context.translate(x, y);
+                            // 英文字符，旋转90°
+                            context.rotate(90 * Math.PI / 180);
+                            context.translate(-x, -y);
+                        } else if (index > 0 && text.charCodeAt(index - 1) < 256) {
+                            // y修正
+                            y = y + arrWidth[index - 1] / 2;
+                        }
+                        context.fillText(letter, x, y);
+                        // 旋转坐标系还原成初始态
+                        context.setTransform(1, 0, 0, 1, 0, 0);
+                        // 确定下一个字符的纵坐标位置
+                        var letterWidth = arrWidth[index];
+                        y = y + letterWidth;
+                    });
+                    // 水平垂直对齐方式还原
+                    context.textAlign = align;
+                    context.textBaseline = baseline;
+                }
+                drawText({
+                    size, text, x, y, article
+                }) {
+                    this.ctx.font = size + "px Arial";
+                    this.ctx.textAlign = 'center'
+                    this.ctx.textBaseline = 'middle'
+                    this.ctx.fillStyle = '#ooffcc'
+                    if (article) {
+                        this.drawTextVertical(this.ctx, text, x, y - size * (text.length / 2 - 0.5))
+                    }
+                    else {
+                        this.ctx.fillText(text, x, y - size * (text.length - 1))
+                    }
+                }
+                renderWord() {
+                    const size = 12 + Math.floor(Math.random() * 28);
+                    const text = this.options.words[Math.floor(Math.random() * this.options.words.length)]
+                    for (let item of this.textPoints) {
+
+                    }
+                }
+            }
+            new WordCloudGenerator({
+                centerWord: '新年快乐新年快乐',
+                words: ["新年", "兔飞猛进", "宏兔大志", "奋发兔强", "大展宏兔", "万事如意", "财旺福旺运气旺", "万马奔腾迎旺年", "生活美美满满", "事业红红火火", "兔年大吉"]
+            });
+        }())
+    </script>
+</body>
+
+</html>
